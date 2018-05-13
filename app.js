@@ -24,16 +24,16 @@ const campgroundSchema = new mongoose.Schema({
 const Campground = mongoose.model('Campground', campgroundSchema);
 
 // Inserts new campground to database
-Campground.create({
-    name: 'Granite Hill',
-    image: 'https://images.unsplash.com/photo-1445308394109-4ec2920981b1?ixlib=rb-0.3.5&s=73115e54fa3d099fcb2d92ccf12eee41&auto=format&fit=crop&w=1953&q=80'
-  }, (err, campground) => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log('Newly created campground', campground);
-  } 
-});
+// Campground.create({
+//     name: 'Granite Hill',
+//     image: 'https://images.unsplash.com/photo-1445308394109-4ec2920981b1?ixlib=rb-0.3.5&s=73115e54fa3d099fcb2d92ccf12eee41&auto=format&fit=crop&w=1953&q=80'
+//   }, (err, campground) => {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log('Newly created campground', campground);
+//   } 
+// });
 
 app.get('/', (req, res) => {
   res.render('landing');
@@ -45,7 +45,7 @@ app.get('/campgrounds', (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      res.render('campgrounds', { allCampgrounds }) ;      
+      res.render('campgrounds', { campgrounds: allCampgrounds }) ;      
     }
   });
 });
@@ -55,11 +55,15 @@ app.post('/campgrounds', (req, res) => {
   const { name, image } = req.body;
   // creates an object with the request body
   const newCampground = { name, image };
-  // pushes the newCampground object to campgrounds array
-  campgrounds.push(newCampground);
-  
-  // redirect back to campgrounds page
-  res.redirect('/campgrounds');
+  // create a new campground and save to database
+  Campground.create(newCampground, (err, newlyCreate) => {
+    if (err) {
+      console.log(err);
+    } else {
+      // redirect back to campgrounds page
+      res.redirect('/campgrounds');
+    }
+  });
 });
 
 app.get('/campgrounds/new', (req, res) => res.render('new'));

@@ -40,8 +40,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/campgrounds', (req, res) => {
-
-  res.render('campgrounds', { campgrounds });
+  // Get all campgrounds from DB
+  Campground.find({}, (err, allCampgrounds) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('campgrounds', { allCampgrounds }) ;      
+    }
+  });
 });
 
 app.post('/campgrounds', (req, res) => {

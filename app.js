@@ -56,9 +56,9 @@ app.get('/campgrounds', (req, res) => {
 // CREATE - adds new campground to database
 app.post('/campgrounds', (req, res) => {
   // get data from form and add to campgrounds array
-  const { name, image } = req.body;
+  const { name, image, description } = req.body;
   // creates an object with the request body
-  const newCampground = { name, image };
+  const newCampground = { name, image, description };
   // create a new campground and save to database
   Campground.create(newCampground, (err, newlyCreate) => {
     if (err) {

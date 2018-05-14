@@ -41,13 +41,14 @@ app.get('/', (req, res) => {
   res.render('landing');
 });
 
+// INDEX - show all campgrounds
 app.get('/campgrounds', (req, res) => {
   // Get all campgrounds from DB
   Campground.find({}, (err, allCampgrounds) => {
     if (err) {
       console.log(err);
     } else {
-      res.render('campgrounds', { campgrounds: allCampgrounds }) ;      
+      res.render('index', { campgrounds: allCampgrounds }) ;      
     }
   });
 });
@@ -75,8 +76,15 @@ app.get('/campgrounds/new', (req, res) => res.render('new'));
 // SHOWS - shows more info about one campground
 app.get('/campgrounds/:id', (req, res) => {
   // find the campground with provided id
-  // render show template with that campground
-  res.render('show');
+  Campground.findById(req.params.id, (err, foundCampground) => {
+    if (err) {
+      console.log(err);
+    } else {
+      // render show template with that campground and pass that campground
+      res.render('show', { campground: foundCampground });
+    }
+  });
+
 });
 
 // Tells express to listen on port and logs to the console
